@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 // Alerts
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
 
 // Styles
 import './app.css';
@@ -12,7 +12,6 @@ import './assets/lib/bootstrap.min.css';
 // Components
 import Board from './components/board';
 import Field from './components/field';
-
 
 class App extends Component {
 
@@ -146,7 +145,7 @@ class App extends Component {
             reverseButtons: true
         }).then((result) => {
             if (result.value) {
-                // Acept
+                // Accept
                 this.start()
             } else if (result.dismiss === Swal.DismissReason.cancel) {
                 // Canceled
@@ -171,7 +170,7 @@ class App extends Component {
     render() {
         return (
             <div className="App">
-                <h1>Player: {this.state.symbols.options[this.state.symbols.turn_index]}</h1>
+                <h1 className="player">Player: {this.state.symbols.options[this.state.symbols.turn_index]}</h1>
                 <Board>
                     {this.state.board.map((value, index) =>
                         <Field key={index} click={() => this.make_play(index)}>{value}</Field>)

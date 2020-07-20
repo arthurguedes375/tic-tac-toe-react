@@ -1,6 +1,6 @@
 .field {
     cursor: pointer;
-    border: 6px solid #2c3e50;
+    border: 6px solid var(--border);
     border-radius: 2px;
     font-family: Helvetica;
     font-weight: bold;
@@ -12,5 +12,5 @@
 }
 
 .field:hover {
-    background-color: #445F7A;
+    background-color: var(--hover);
 }

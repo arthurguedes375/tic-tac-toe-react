@@ -8,9 +8,13 @@
     background-color: var(--bgc);
 }
 
+.player {
+    color: var(--player)
+}
+
 .btnRst {
-    border: 4px solid #2c3e50;
-    background-color: #34495e;
+    border: 4px solid var(--border);
+    background-color: var(--bgc);
     color: #fff;
     cursor: pointer;
     padding: 10px 20px;
@@ -18,7 +22,7 @@
 }
 
 .btnRst:hover {
-    background-color: #445F7A;
+    background-color: var(--hover);
 }
 
 .confirmBtn {

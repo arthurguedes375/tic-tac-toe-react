@@ -1,8 +1,19 @@
+/* Blue Theme: */
 :root {
-    --bgc: #123;
-    --hover: #0b345d;
-    --border: #123;
+    --bgc: #2367ac;
+    --hover: #4981b9;
+    --border: #0c59a7;
+    --player: white;
 }
+
+/* 
+    Black Theme {
+        --bgc: #123;
+        --hover: #0b345d;
+        --border: #25323f;
+        --player: white;
+    }
+*/
 
 *, *::before, *::after {
     padding: 0;

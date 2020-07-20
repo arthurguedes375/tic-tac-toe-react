@@ -2,9 +2,9 @@
     width: 600px;
 	height: 600px;
 	margin: 15px auto;
-    background-color: #34495e;
+    background-color: var(--bgc);
     color: #fff;
-    border: 6px solid #2c3e50;
+    border: 6px solid var(--border);
     border-radius: 10px;
 	display: grid;
 	grid-template: repeat(3, 1fr) / repeat(3, 1fr);

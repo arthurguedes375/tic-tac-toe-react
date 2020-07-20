@@ -1,0 +1,13 @@
+.btnRst {
+    border: 4px solid var(--border);
+    background-color: var(--bgc);
+    color: var(--text-color);
+    cursor: pointer;
+    padding: 10px 20px;
+    transition: background-color .2s;
+    outline: none;
+}
+
+.btnRst:hover {
+    background-color: var(--hover);
+}

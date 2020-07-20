@@ -3,7 +3,7 @@
 	height: 600px;
 	margin: 15px auto;
     background-color: var(--bgc);
-    color: #fff;
+    color: var(--text-color);
     border: 6px solid var(--border);
     border-radius: 10px;
 	display: grid;

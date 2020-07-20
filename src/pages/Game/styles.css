@@ -1,0 +1,22 @@
+.Game {
+    font-family: Helvetica, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: var(--bgc);
+}
+
+.player {
+    color: var(--text-color);
+}
+
+
+.confirmBtn {
+    margin-left: 7px;
+}
+
+.cancelBtn {
+    margin-right: 7px;
+}

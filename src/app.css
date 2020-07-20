@@ -1,35 +1,7 @@
 .App {
-    font-family: Helvetica, sans-serif;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     height: 100vh;
-    background-color: var(--bgc);
-}
-
-.player {
-    color: var(--player)
-}
-
-.btnRst {
-    border: 4px solid var(--border);
-    background-color: var(--bgc);
-    color: #fff;
-    cursor: pointer;
-    padding: 10px 20px;
-    transition: background-color .2s;
-    outline: none;
-}
-
-.btnRst:hover {
-    background-color: var(--hover);
-}
-
-.confirmBtn {
-    margin-left: 7px;
-}
-
-.cancelBtn {
-    margin-right: 7px;
 }

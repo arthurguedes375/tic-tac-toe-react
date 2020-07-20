@@ -19,6 +19,7 @@
     cursor: pointer;
     padding: 10px 20px;
     transition: background-color .2s;
+    outline: none;
 }
 
 .btnRst:hover {

@@ -176,7 +176,7 @@ class App extends Component {
                         <Field key={index} click={() => this.make_play(index)}>{value}</Field>)
                     }
                 </Board>
-                <button onClick={() => this.start()} type="button" className="btnRst">Restart</button>
+                <input onClick={() => this.start()} type="button" className="btnRst" value="Restart" />
             </div>
         );
     }

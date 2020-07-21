@@ -13,7 +13,7 @@ const gameData = {
     generateData(maxRounds, nameP1, nameP2) {
         const game_data = {
             maxRounds,
-            roundNumber: 0,
+            roundNumber: 1,
             gameover: false,
             p1: {
                 nickname: nameP1,
@@ -30,47 +30,46 @@ const gameData = {
     /*
 
     const last_round = {
-        maxRounds: 3,
-        roundNumber: 0
+        roundNumber: 1
 
         winner: {
-            player: "p1 | p2"
+            player: 1 | 2
         },
     };
 
-    const players_data = {
-        p1: {
-            nickname: "Arthur",
-            score: 0
-        },
-        p2: {
-            nickname: "Gustavo",
-            score: 0
-        }
-    }
-
     */
 
-    nextRound(last_round, players_data) {
-        if (Math.trunc(last_round.maxRounds / 2) < players_data.p1.score) {
+    nextRound(last_round) {
+        const data = this.load();
+        const players_data = {
+            p1: {
+                nickname: data.p1.nickname,
+                score: (last_round.winner.player === 1) ? ++data.p1.score : data.p1.score
+            },
+
+            p2: {
+                nickname: data.p2.nickname,
+                score: (last_round.winner.player === 2) ? ++data.p2.score : data.p2.score
+            }
+        };
+
+
+        if (Math.trunc(data.maxRounds / 2) < players_data.p1.score || Math.trunc(data.maxRounds / 2) < players_data.p2.score) {
             return {
-                winner: (players_data.p1.score > players_data.p2.score) ? players_data.p1 : players_data.p2,
+                winner: (players_data.p1.score > players_data.p2.score) ? 1 : 2,
+                p1: players_data.p1,
+                p2: players_data.p2,
                 gameover: true,
             };
         }
 
+
         const next_game_data = {
-            maxRounds: last_round.maxRounds,
-            roundNumber: last_round.roundNumber++,
+            maxRounds: data.maxRounds,
+            roundNumber: ++last_round.roundNumber,
             gameover: false,
-            p1: {
-                nickname: players_data.p1.nickname,
-                score: (last_round.winner.player === "p1") ? players_data.p1.score++ : players_data.p1.score
-            },
-            p2: {
-                nickname: players_data.p2.nickname,
-                score: (last_round.winner.player === "p2") ? players_data.p2.score++ : players_data.p2.score
-            },
+            p1: players_data.p1,
+            p2: players_data.p2,
         }
         return next_game_data;
     },

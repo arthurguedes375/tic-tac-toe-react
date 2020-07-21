@@ -9,6 +9,9 @@ import './styles.css';
 // Bootstrap
 import '../../assets/lib/bootstrap.min.css';
 
+// Router
+import { Redirect, Link } from 'react-router-dom';
+
 // Components
 import Board from '../../components/board';
 import Field from '../../components/field';
@@ -54,6 +57,8 @@ class Game extends Component {
         ],
         gameover: false,
 
+        redirect: false
+
     }
 
     constructor(props) {
@@ -62,8 +67,9 @@ class Game extends Component {
         this.make_play = this.make_play.bind(this);
         this.check_winning_sequences = this.check_winning_sequences.bind(this);
         this.check_tied = this.check_tied.bind(this);
-        this.start = this.start.bind(this);
         this.alert = this.alert.bind(this);
+        this.scoreBoard = this.scoreBoard.bind(this);
+        this.start = this.start.bind(this);
     }
 
     componentDidMount() {
@@ -72,7 +78,8 @@ class Game extends Component {
     }
 
 
-    make_play(position) {
+
+    async make_play(position) {
 
         if (this.state.gameover) return false;
         if (this.state.board[position] === '') {
@@ -83,16 +90,66 @@ class Game extends Component {
             if (check_winning_sequences_index >= 0) {
                 this.setState({ gameover: true })
 
-                const data = {
-                    title: `Winner: ${(this.state.symbols.options[this.state.symbols.turn_index] == "X") ? this.state.game.p1.nickname : this.state.game.p2.nickname} (${this.state.symbols.options[this.state.symbols.turn_index]})`,
-                    text: 'Restart?',
-                    icon: 'success',
-                    confirmText: 'Yes!',
-                    cancelText: 'No!',
-                    canceledValue() { }
+                const state = this.state;
+
+                const last_round = {
+                    roundNumber: state.game.roundNumber,
+                    winner: {
+                        player: (state.symbols.options[state.symbols.turn_index] === "X") ? 1 : 2,
+                    }
                 }
 
-                setTimeout(() => this.alert(data), 150);
+                const nextGameStatus = game_data.nextRound(last_round);
+                if (nextGameStatus.gameover === true) {
+                    const data = {
+                        title: `Winner: ${(nextGameStatus.winner === 1) ? nextGameStatus.p1.nickname : nextGameStatus.p2.nickname}`,
+                        text: `
+                        <strong>${this.state.game.p1.nickname}</strong>: ${nextGameStatus.p1.score}<br>
+                        <strong>${this.state.game.p2.nickname}</strong>: ${nextGameStatus.p2.score}<br><br>
+
+                        Settings?
+                        
+                        `,
+                        icon: 'success',
+                        confirmText: 'Yes!',
+                        confirmValue: () => this.setState({ redirect: true }),
+                        canceledValue() { }
+                    }
+                    setTimeout(() => this.alert(data), 150);
+                } else {
+                    await game_data.save(nextGameStatus)
+
+                    let timerInterval;
+                    Swal.fire({
+                        title: 'Next round',
+                        html: 'Next round in <b></b> milliseconds.',
+                        timer: 700,
+                        timerProgressBar: true,
+                        onBeforeOpen: () => {
+                            Swal.showLoading()
+                            timerInterval = setInterval(() => {
+                                const content = Swal.getContent()
+                                if (content) {
+                                    const b = content.querySelector('b')
+                                    if (b) {
+                                        b.textContent = Swal.getTimerLeft()
+                                    }
+                                }
+                            }, 100)
+                        },
+                        onClose: () => {
+                            clearInterval(timerInterval)
+                            this.start()
+                        }
+                    }).then((result) => {
+                        /* Read more about handling dismissals below */
+                        if (result.dismiss === Swal.DismissReason.timer) {
+                            // console.log('I was closed by the timer')
+                        }
+                    })
+
+                }
+
 
 
             } else {
@@ -117,11 +174,11 @@ class Game extends Component {
         } else {
             return false;
         }
-
     }
 
+
+
     check_winning_sequences(symbol) {
-        console.log(this.state.winning_sequences);
 
         let returned = -1;
 
@@ -129,7 +186,6 @@ class Game extends Component {
             if (this.state.board[this.state.winning_sequences[i][0]] === symbol &&
                 this.state.board[this.state.winning_sequences[i][1]] === symbol &&
                 this.state.board[this.state.winning_sequences[i][2]] === symbol) {
-                console.log("Sequencia vencedora: " + i);
                 returned = i;
             }
         });
@@ -138,7 +194,6 @@ class Game extends Component {
 
     // If tied return true
     check_tied() {
-        console.log(this.state.board);
         let returned = true;
         this.state.board.map((value, i) => {
             if (this.state.board[i] === '') returned = false;
@@ -157,16 +212,17 @@ class Game extends Component {
 
         swalWithBootstrapButtons.fire({
             title: data.title,
-            text: data.text,
+            html: data.text,
             icon: data.icon,
-            showCancelButton: true,
+            showCancelButton: (data.cancelText) ? true : false,
             confirmButtonText: data.confirmText,
             cancelButtonText: data.cancelText,
             reverseButtons: true
         }).then((result) => {
             if (result.value) {
                 // Accept
-                this.start()
+                this.start();
+                data.confirmValue();
             } else if (result.dismiss === Swal.DismissReason.cancel) {
                 // Canceled
                 data.canceledValue();
@@ -174,6 +230,17 @@ class Game extends Component {
 
         })
     }
+
+    scoreBoard() {
+        const game = game_data.load();
+        alert(`
+            ${game.p1.nickname}: ${game.p1.score}
+            ${game.p2.nickname}: ${game.p2.score}
+        `);
+    }
+
+
+
 
     start() {
 
@@ -188,19 +255,27 @@ class Game extends Component {
 
 
     render() {
-        return (
-            <div className="Game">
+        if (this.state.redirect) {
+            return <Redirect to="/" />
+        } else {
+            return (
+                <div className="Game">
 
-                <h1 className="player">Turn: {(this.state.symbols.options[this.state.symbols.turn_index] == "X") ? this.state.game.p1.nickname : this.state.game.p2.nickname} ({this.state.symbols.options[this.state.symbols.turn_index]})</h1>
+                    <h1 className="player">Turn: {(this.state.symbols.options[this.state.symbols.turn_index] === "X") ? this.state.game.p1.nickname : this.state.game.p2.nickname} ({this.state.symbols.options[this.state.symbols.turn_index]})</h1>
 
-                <Board>
-                    {this.state.board.map((value, index) =>
-                        <Field key={index} click={() => this.make_play(index)}>{value}</Field>)
-                    }
-                </Board>
-                <Button onClick={() => this.start()} value="Restart" />
-            </div>
-        );
+                    <Board>
+                        {this.state.board.map((value, index) =>
+                            <Field key={index} click={() => this.make_play(index)}>{value}</Field>)
+                        }
+                    </Board>
+                    <div className="buttons">
+                        <Link to="/"><Button value="Settings" /></Link>
+                        <Button onClick={() => this.scoreBoard()} value="Score Board" />
+                        <Button onClick={() => this.start()} value="Restart" />
+                    </div>
+                </div>
+            );
+        }
     }
 }
 

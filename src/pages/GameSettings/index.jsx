@@ -50,6 +50,10 @@ class GameSettings extends Component {
         this.setState({ redirect: true });
     }
 
+    componentDidMount() {
+        localStorage.removeItem("game_data")
+    }
+
 
     render() {
         if (this.state.redirect) {

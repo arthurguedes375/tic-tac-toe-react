@@ -7,19 +7,26 @@ import './styles.css';
 // Router
 import { Redirect } from 'react-router-dom'
 
-
 // Components
 import Button from '../../components/button';
 
+
+// Services
+const game_data = require('../../services/data');
 
 
 class GameSettings extends Component {
 
     state = {
-        gameRules: {
-            rounds: null
-        },
-        redirect: false
+
+        maxRounds: 1,
+
+        redirect: false,
+        nicknameP1: 'Player 1',
+        nicknameP2: 'Player 2',
+
+        inputP1: '',
+        inputP2: '',
 
     }
 
@@ -29,15 +36,18 @@ class GameSettings extends Component {
         this.setRounds = this.setRounds.bind(this);
     }
 
-    async setRounds(rounds) {
-        await this.setState({ gameRules: { rounds } });
+    setRounds(rounds) {
+        this.setState({ maxRounds: rounds });
+    }
 
-        await localStorage.setItem("game", JSON.stringify({
-            rounds: this.state.gameRules.rounds
-        }));
+    async start() {
+        const maxRounds = this.state.maxRounds;
+        const nicknameP1 = this.state.nicknameP1;
+        const nicknameP2 = this.state.nicknameP2;
 
+        const gameData = await game_data.generateData(maxRounds, nicknameP1, nicknameP2);
+        await game_data.save(gameData);
         this.setState({ redirect: true });
-
     }
 
 
@@ -48,21 +58,36 @@ class GameSettings extends Component {
 
             return (
                 <div className="GameSettings">
-                    <h1>Best of:</h1>
-                    <ul>
-                        <li>
-                            <Button onClick={() => this.setRounds(1)} value="1" />
-                        </li>
+                    <div className="rounds">
+                        <h1>Rounds: </h1>
+                        <ul>
+                            <li>
+                                <Button onClick={() => this.setRounds(1)} value="1" />
+                            </li>
 
-                        <li>
-                            <Button onClick={() => this.setRounds(3)} value="3" />
-                        </li>
+                            <li>
+                                <Button onClick={() => this.setRounds(3)} value="3" />
+                            </li>
 
-                        <li>
-                            <Button onClick={() => this.setRounds(5)} value="5" />
-                        </li>
+                            <li>
+                                <Button onClick={() => this.setRounds(5)} value="5" />
+                            </li>
+                        </ul>
+                    </div>
+                    <div className="players">
+                        <div>
+                            <h1>Player 1: </h1>
+                            <input type="text" placeholder="Name..." className="inputNickname" onChange={(e) => this.setState({ inputP1: e.target.value, nicknameP1: e.target.value })} value={this.state.inputP1} />
+                        </div>
 
-                    </ul>
+                        <div>
+                            <h1>Player 2: </h1>
+                            <input type="text" placeholder="Name..." className="inputNickname" onChange={(e) => this.setState({ inputP2: e.target.value, nicknameP2: e.target.value })} value={this.state.inputP2} />
+                        </div>
+                    </div>
+                    <div>
+                        <Button onClick={() => this.start()} value="Start!" />
+                    </div>
                 </div>
             );
         }

@@ -14,9 +14,24 @@ import Board from '../../components/board';
 import Field from '../../components/field';
 import Button from '../../components/button';
 
+
+// Services
+const game_data = require('../../services/data');
+
+
+
 class Game extends Component {
 
     state = {
+        game: {
+            p1: {
+                nickname: "",
+            },
+            p2: {
+                nickname: "",
+            }
+        },
+
 
         board: ['', '', '', '', '', '', '', '', ''],
         symbols: {
@@ -51,6 +66,11 @@ class Game extends Component {
         this.alert = this.alert.bind(this);
     }
 
+    componentDidMount() {
+        const game = game_data.load();
+        this.setState({ game });
+    }
+
 
     make_play(position) {
 
@@ -64,13 +84,12 @@ class Game extends Component {
                 this.setState({ gameover: true })
 
                 const data = {
-                    title: `Winner: ${this.state.symbols.options[this.state.symbols.turn_index]}`,
+                    title: `Winner: ${(this.state.symbols.options[this.state.symbols.turn_index] == "X") ? this.state.game.p1.nickname : this.state.game.p2.nickname} (${this.state.symbols.options[this.state.symbols.turn_index]})`,
                     text: 'Restart?',
                     icon: 'success',
                     confirmText: 'Yes!',
                     cancelText: 'No!',
                     canceledValue() { }
-
                 }
 
                 setTimeout(() => this.alert(data), 150);
@@ -171,7 +190,9 @@ class Game extends Component {
     render() {
         return (
             <div className="Game">
-                <h1 className="player">Player: {this.state.symbols.options[this.state.symbols.turn_index]}</h1>
+
+                <h1 className="player">Turn: {(this.state.symbols.options[this.state.symbols.turn_index] == "X") ? this.state.game.p1.nickname : this.state.game.p2.nickname} ({this.state.symbols.options[this.state.symbols.turn_index]})</h1>
+
                 <Board>
                     {this.state.board.map((value, index) =>
                         <Field key={index} click={() => this.make_play(index)}>{value}</Field>)

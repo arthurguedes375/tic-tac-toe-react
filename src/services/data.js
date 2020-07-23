@@ -82,6 +82,4 @@ const gameData = {
 };
 
 
-
-
-module.exports = gameData;
+export default gameData;

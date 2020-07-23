@@ -19,7 +19,7 @@ import Button from '../../components/button';
 
 
 // Services
-const game_data = require('../../services/data');
+import { gameData as game_data } from '../../services/data';
 
 
 

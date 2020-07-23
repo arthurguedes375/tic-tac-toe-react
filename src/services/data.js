@@ -1,4 +1,4 @@
-const gameData = {
+export const gameData = {
 
     async save(data) {
         try {
@@ -80,6 +80,3 @@ const gameData = {
     }
 
 };
-
-
-export default gameData;

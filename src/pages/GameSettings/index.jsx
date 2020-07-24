@@ -53,13 +53,21 @@ class GameSettings extends Component {
 
     componentDidMount() {
         const data = localStorage.getItem("game_data") ? game_data.load() : { p1: {}, p2: {} };
-        if (data.p1.nickname) {
-            this.setState({
-                nicknameP1: data.p1.nickname, inputP1: data.p1.nickname,
-                nicknameP2: data.p2.nickname, inputP2: data.p2.nickname,
-                maxRounds: data.maxRounds
-            })
+        const newState = {};
+        if (data.p1.nickname && data.p1.nickname !== "Player 1") {
+            newState.nicknameP1 = data.p1.nickname;
+            newState.inputP1 = data.p1.nickname;
+            newState.maxRounds = data.maxRounds;
         }
+
+        if (data.p2.nickname && data.p2.nickname !== "Player 2") {
+            newState.nicknameP2 = data.p2.nickname;
+            newState.inputP2 = data.p2.nickname;
+            newState.maxRounds = data.maxRounds;
+        }
+
+        this.setState(newState);
+
         localStorage.removeItem("game_data")
     }
 

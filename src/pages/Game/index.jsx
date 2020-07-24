@@ -164,6 +164,7 @@ class Game extends Component {
                         icon: 'info',
                         confirmText: 'Yes!',
                         cancelText: 'No!',
+                        confirmValue() { },
                         canceledValue() { }
                     }
 

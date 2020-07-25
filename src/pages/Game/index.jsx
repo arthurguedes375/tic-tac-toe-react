@@ -20,6 +20,7 @@ import Button from '../../components/button';
 
 // Services
 import { gameData as game_data } from '../../services/data';
+import { themes } from '../../services/themes';
 
 
 
@@ -75,6 +76,7 @@ class Game extends Component {
     componentDidMount() {
         const game = game_data.load();
         this.setState({ game });
+        themes.loadThemes();
     }
 
 

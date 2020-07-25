@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 
+// Initial Theme
+import '../../assets/themes/dark-theme.css';
 
 // Styles
 import './styles.css';
+
 
 // Router
 import { Redirect } from 'react-router-dom'
@@ -13,6 +16,7 @@ import Button from '../../components/button';
 
 // Services
 import { gameData as game_data } from '../../services/data';
+import { themes } from '../../services/themes';
 
 
 
@@ -28,13 +32,13 @@ class GameSettings extends Component {
 
         inputP1: '',
         inputP2: '',
-
     }
 
     constructor(props) {
         super(props);
 
         this.setRounds = this.setRounds.bind(this);
+        this.changeTheme = this.changeTheme.bind(this);
     }
 
     setRounds(rounds) {
@@ -69,7 +73,29 @@ class GameSettings extends Component {
         this.setState(newState);
 
         localStorage.removeItem("game_data")
+
+
+        themes.loadThemes();
+
     }
+
+    changeTheme(themeIndex) {
+
+        switch (themeIndex) {
+            case 0:
+                themes.setTheme(themes.themes.dark);
+                break;
+            case 1:
+                themes.setTheme(themes.themes.blue);
+                break;
+            default:
+                themes.setTheme(themes.themes.dark);
+                break;
+        }
+
+    }
+
+
 
 
     render() {
@@ -79,6 +105,19 @@ class GameSettings extends Component {
 
             return (
                 <div className="GameSettings">
+                    <div className="themesSets">
+                        <ul>
+                            <li>
+                                <Button onClick={() => this.changeTheme(0)} value="Dark Theme" />
+                            </li>
+
+                            <li>
+                                <Button onClick={() => this.changeTheme(1)} value="Blue Theme" />
+                            </li>
+
+                        </ul>
+                    </div>
+
                     <div className="rounds">
                         <h1>Rounds: </h1>
                         <ul>

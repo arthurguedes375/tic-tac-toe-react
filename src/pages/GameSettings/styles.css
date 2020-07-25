@@ -8,6 +8,25 @@
     background-color: var(--bgc);
 }
 
+
+.themesSets {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+
+.themesSets ul {
+    width: 340px;
+    
+    margin-bottom: 40px;
+    
+    list-style: none;
+    display: flex;
+    justify-content: space-around;
+}
+
+
+
 .rounds {
     display: flex;
     flex-direction: row;
@@ -66,8 +85,3 @@
 .inputNickname:hover {
     border: 1px solid black;
 }
-
-
-
-
-

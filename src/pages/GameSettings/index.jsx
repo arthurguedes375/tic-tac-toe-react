@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 
-// Initial Theme
-import '../../assets/themes/dark-theme.css';
 
 // Styles
 import './styles.css';
@@ -61,12 +59,14 @@ class GameSettings extends Component {
         if (data.p1.nickname && data.p1.nickname !== "Player 1") {
             newState.nicknameP1 = data.p1.nickname;
             newState.inputP1 = data.p1.nickname;
-            newState.maxRounds = data.maxRounds;
         }
 
         if (data.p2.nickname && data.p2.nickname !== "Player 2") {
             newState.nicknameP2 = data.p2.nickname;
             newState.inputP2 = data.p2.nickname;
+        }
+
+        if (data.maxRounds) {
             newState.maxRounds = data.maxRounds;
         }
 
@@ -83,13 +83,13 @@ class GameSettings extends Component {
 
         switch (themeIndex) {
             case 0:
-                themes.setTheme(themes.themes.dark);
+                themes.setTheme(themes.themes_data.dark);
                 break;
             case 1:
-                themes.setTheme(themes.themes.blue);
+                themes.setTheme(themes.themes_data.blue);
                 break;
             default:
-                themes.setTheme(themes.themes.dark);
+                themes.setTheme(themes.themes_data.dark);
                 break;
         }
 
@@ -108,11 +108,11 @@ class GameSettings extends Component {
                     <div className="themesSets">
                         <ul>
                             <li>
-                                <Button onClick={() => this.changeTheme(0)} value="Dark Theme" />
+                                <Button onClick={() => this.changeTheme(0)} value={themes.themes_data.dark.title} />
                             </li>
 
                             <li>
-                                <Button onClick={() => this.changeTheme(1)} value="Blue Theme" />
+                                <Button onClick={() => this.changeTheme(1)} value={themes.themes_data.blue.title} />
                             </li>
 
                         </ul>

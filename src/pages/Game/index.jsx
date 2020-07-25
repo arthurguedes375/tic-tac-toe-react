@@ -185,6 +185,7 @@ class Game extends Component {
 
         let returned = -1;
 
+        // eslint-disable-next-line
         this.state.winning_sequences.map((value, i) => {
             if (this.state.board[this.state.winning_sequences[i][0]] === symbol &&
                 this.state.board[this.state.winning_sequences[i][1]] === symbol &&
@@ -198,6 +199,8 @@ class Game extends Component {
     // If tied return true
     check_tied() {
         let returned = true;
+
+        // eslint-disable-next-line
         this.state.board.map((value, i) => {
             if (this.state.board[i] === '') returned = false;
         });

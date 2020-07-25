@@ -1,19 +1,8 @@
+import { themes_data } from '../assets/themes/themes_data';
+
 export const themes = {
 
-    themes: {
-        dark: {
-            bgc: "#123",
-            hover: "#374757",
-            border: "#25323f",
-            textColor: "#fff",
-        },
-        blue: {
-            bgc: "#2367ac",
-            hover: "#4981b9",
-            border: "#0c59a7",
-            textColor: "#fff",
-        }
-    },
+    themes_data,
 
 
     getStyle(element, property) {
@@ -23,7 +12,7 @@ export const themes = {
     loadThemes() {
         // localStorageTheme
         const lcStTm = localStorage.getItem("theme");
-        const newTheme = (lcStTm) ? JSON.parse(lcStTm) : this.themes.dark;
+        const newTheme = (lcStTm) ? JSON.parse(lcStTm) : this.themes_data.dark;
         this.setTheme(newTheme);
     },
 
